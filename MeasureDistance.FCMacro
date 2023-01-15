@@ -1,0 +1,61 @@
+# MeasureDistance.FCMacro
+# (C) 2023 juergen@fabmail.org - distribute under LGPL-2.1
+#
+# 2023-01-15, juergen@fabmail.org	initial draught
+#
+# Usage:
+# 1) Copy the file MeasureDistance.FCMacro to your ~/.FreeCAD/Macro/ folder.
+# 2) (Re)start freecad,
+# 3) open Part or Part Design workbench 
+# 4) Create some object (cube, Cone, Sketch, Pad, Cut, ...)
+#    - or import an STL, Part -> Create Shape from Mesh ...
+# 
+# 6) Select an Edge of the object
+#    -> select Macros -> MeasureDistance
+#    -> The length of the edge is printed to the python console.
+# 7) Click a vertex at one end of the object and another vertext a the other end.
+#    -> select Macros -> MeasureDistance
+#    -> distance between the two vertices is printed to the python console.
+#
+
+
+def MeasureDistance():
+  s = Gui.Selection.getSelectionEx()
+  if len(s) != 1:
+    print("ERROR: must have exactly one selected object. %d selected" % len(s))
+    return
+
+  o = s[0].SubObjects
+  if len(o) == 1 and o[0].ShapeType == 'Edge':
+    print("INFO: Only one Edge given. Measuring length:")
+    if o[0].curvatureAt(0.5) != 0.0:
+      print("WARN: Edge is not straight.")
+    print(o[0].Length)
+
+  elif len(o) == 2 and o[0].ShapeType == 'Vertex' and o[1].ShapeType == 'Vertex':
+    print(o[0].Point.distanceToPoint(o[1].Point))
+
+  elif len(o) == 2 and o[0].ShapeType == 'Edge' and o[1].ShapeType == 'Edge':
+    if o[0].curvatureAt(0.5) != 0.0:
+      print("WARN: First Edge is not straight")
+    if o[1].curvatureAt(0.5) != 0.0:
+      print("WARN: Second Edge is not straight")
+      
+    dir1 = o[0].Curve.Direction
+    dir2 = o[1].Curve.Direction
+    if abs(dir1.dot(dir2)) < 0.99999999999:
+      print("WARN: Edges %s are not parallel." % (s[0].SubElementNames,))
+
+    # distToShape() finds the shortest distance between two curves.
+    # 0: distance
+    # 1: points, first on self, second on parameter)
+    # 2: info, names and interpolation parameter in between vertices
+    # (2.711142218700334, [(Vector (-69.34358978271484, 0.0, 0.9373806118965149), Vector (-67.4768163703524, 0.0, 2.9034551671756454))], [('Vertex', 0, None, 'Edge', 0, 2.9538998097702605)])
+    print(o[0].distToShape(o[1])[0])
+
+  else:
+    print("ERROR: Must have exactly one Edge or two Vertices or two parallel Edges selected. Got: %s" % (s[0].SubElementNames,))
+
+
+MeasureDistance()
+
