@@ -1,7 +1,7 @@
 # freecad-macro-MeasureDistance
 
 This macro is just an exercise. It does technically work similar as the yellowish round measurement icons
-<img src="https://wiki.freecad.org/images/c/c7/Part_Measure_Linear.svg" width=24>, except I have no GUI whatsoever. Simply printig to stdout. If you come here because the blue ruler is annoying, it does not snap, it cannot do angles, etc... then you are wrong here. Use the Measurement icons that do not look like a ruler. They snap perfectly fine, and do a wonderful job.
+<img src="https://wiki.freecad.org/images/c/c7/Part_Measure_Linear.svg" width=24>, except I have no GUI whatsoever. Simply printig to stdout. If you come here because the blue ruler is annoying, it does not snap, it cannot do angles, etc... then you are wrong here. Use https://wiki.freecad.org/Part_Measure_Linear . This tool snaps perfectly fine, and does a wonderful job.
 
 1) Copy the file MeasureDistance.FCMacro to your ~/.local/share/FreeCAD/Macro/ folder.
    (The personal macro folder could also be ~/.FreeCAD/Macro/ )
